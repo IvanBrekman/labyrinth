@@ -20,6 +20,7 @@ gray = pygame.Color((120, 120, 120))
 dark_gray = pygame.Color((50, 50, 50))
 dark_green = pygame.Color((50, 70, 0))
 
+MAPS_DIR = "maps"
 TILE_SIZE = 32
 ENEMY_EVENT_TYPE = pygame.USEREVENT
 
@@ -27,7 +28,7 @@ ENEMY_EVENT_TYPE = pygame.USEREVENT
 class Labyrinth:
     def __init__(self, filename, free_tiles, finish_tile):
         self.map = []
-        with open(filename) as input_file:
+        with open(f"{MAPS_DIR}/{filename}") as input_file:
             for line in input_file:
                 self.map.append(list(map(int, line.split())))
         self.height = len(self.map)
@@ -193,6 +194,14 @@ if __name__ == '__main__':
 
             if event.type == ENEMY_EVENT_TYPE and not game_over:
                 game.move_enemy()
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_r:
+                    game_over = False
+
+                    hero = Player(7, 7)
+                    enemy = Enemy(7, 1)
+                    game = Game(labyrinth, hero, enemy)
 
         # формирование кадра
         if not game_over:
